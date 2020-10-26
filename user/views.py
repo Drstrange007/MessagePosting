@@ -56,6 +56,8 @@ class tweetlike(APIView):
         tweet1 = tweet.objects.filter(tweet_id=tweetId).first()
         user1 = user.objects.filter(user_id=userId).first()
         
+        if user1 in [None, '']:
+            return Response(data="user does not exists")
         if tweet1 in [None, ''] :
             return Response(data="No such Tweet Exists")
         else :
