@@ -15,6 +15,14 @@ from datetime import timedelta
 from rest_framework.decorators import action
 
 
+class users(APIView):
+    
+    def get(self, request):
+
+        user1 = user.objects.all()
+        serializer = userSerializer(user1, many=True)
+        return Response(data= serializer.data)
+
 class followerinfo(APIView):
     
     def get(self, request, userId):
@@ -98,6 +106,17 @@ class retweet(APIView):
         parent_tweet_id=tweetId).only('user_id')
         serializer = tweetSerializer(retweet1, many=True)
         return Response(data= serializer.data)
+
+
+class tweets(APIView):
+
+    def get(self, request):
+
+        user1 = tweet.objects.all()
+        serializer = tweetSerializer(user1, many=True)
+        return Response(data= serializer.data)
+
+
 
 
              

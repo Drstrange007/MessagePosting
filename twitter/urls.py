@@ -21,12 +21,14 @@ from user import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('userslist', views.users.as_view()),
     path('following/userId/<int:userId>', views.followinginfo.as_view()),
     path('follower/userId/<int:userId>', views.followerinfo.as_view()),
     path('timeline/userId/<int:usersId>/duration/<int:duration>', views.timeline.as_view()),
     path('liketweet/userId/<int:userId>/tweetId/<int:tweetId>', views.tweetlike.as_view()),
     path('tweetliked/userId/<int:userId>/tweetId/<int:tweetId>',views.tweetlike.as_view()),
     path('retweet/userId/<int:userId>/tweetId/<int:tweetId>', views.retweet.as_view()),
-    path('tweetretweeted/userId/<int:userId>/tweetId/<int:tweetId>',views.retweet.as_view())
+    path('tweetretweeted/userId/<int:userId>/tweetId/<int:tweetId>',views.retweet.as_view()),
+    path('tweetslist', views.tweets.as_view())
 
 ]

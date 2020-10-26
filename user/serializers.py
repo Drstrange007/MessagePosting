@@ -9,7 +9,7 @@ class userSerializer(serializers.ModelSerializer):
 
     class Meta:
         model= user
-        fields= ('user_id', 'name', 'followers_count', 'folowing_count')
+        fields= ('user_id', 'name', 'followers_count', 'following_count', 'created_at')
     
 
 class tweetSerializer(serializers.ModelSerializer):
