@@ -23,37 +23,37 @@ class users(APIView):
         serializer = userSerializer(user1, many=True)
         return Response(data= serializer.data)
 
-class followerinfo(APIView):
-    
-    def get(self, request, userId):
-
-        user1 = follower.objects.filter(following_id=userId)
-        if user1.first() in [None, '']:
-            return Response(data="no such user exists")
-        else:
-            serializer = followerSerializer(user1.all(), many=True)
-            return Response(data= serializer.data)
-
 class followinginfo(APIView):
     
     def get(self, request, userId):
 
-        user1 = follower.objects.filter(user_id=userId)
+        user1 = user.objects.filter(user_id=userId)
         if user1.first() in [None,'[]']:
             return Response(data="no such user exists")
         else:
-            serializer = followerSerializer(user1.all(), many=True)
+            serializer = followerSerializer(follower.objects.filter(user_id=userId).all(), many=True)
+            return Response(data= serializer.data)
+
+class followerinfo(APIView):
+    
+    def get(self, request, userId):
+
+        user1 = user.objects.filter(user_id=userId)
+        if user1.first() in [None, '']:
+            return Response(data="no such user exists")
+        else:
+            serializer = followerSerializer(follower.objects.filter(following_id=userId).all(), many=True)
             return Response(data= serializer.data)
 
 class timeline(APIView):
 
     def get(self, request, usersId, duration):
         
-        user1 = follower.objects.filter(user_id=usersId)
+        user1 = user.objects.filter(user_id=usersId)
         if user1.first() in [None,'[]']:
             return Response(data="NO such user exists")
         else:
-            tweet1 = tweet.objects.filter(user_id__in = user1.values_list('following_id'),
+            tweet1 = tweet.objects.filter(user_id__in = follower.objects.filter(user_id=usersId).values_list('following_id'),
             created_at__gte= (timezone.now()- timedelta(days=duration)))
             serializer = tweetSerializer(tweet1, many = True)
             return Response(data= serializer.data)
@@ -84,14 +84,14 @@ class tweetlike(APIView):
 
     def get(self, request, userId, tweetId):
 
-        user1 = follower.objects.filter(user_id=userId)
+        user1 = user.objects.filter(user_id=userId)
         tweet1 = tweet.objects.filter(tweet_id=tweetId)
         if user1.first() in [None,'[]']:
             return Response(data="NO such user exists")
         elif tweet1.first() in [None,'[]']:
             return Response(data="NO such tweet exists")
         else:
-            tweetliked1 = tweet_likes.objects.filter(liked_user_id__in = user1.values_list('following_id'), 
+            tweetliked1 = tweet_likes.objects.filter(liked_user_id__in = follower.objects.filter(user_id=userId).values_list('following_id'), 
             tweet_id=tweetId)
             serializer = tweet_likesSerializer(tweetliked1, many=True)
             return Response(data= serializer.data)
